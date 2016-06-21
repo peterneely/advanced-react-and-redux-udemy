@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "dev": "nodemon index.js"
   },
   "author": "",
@@ -15,5 +15,9 @@
     "mongoose": "^4.5.1",
     "morgan": "^1.7.0",
     "nodemon": "^1.9.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3",
+    "supertest": "^1.2.0"
   }
 }
