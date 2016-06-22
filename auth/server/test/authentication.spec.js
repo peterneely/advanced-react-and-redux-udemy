@@ -1,38 +1,52 @@
-// require = require('really-need');
-var request = require('supertest');
+const request = require('supertest');
 
-var server;
+// require('../models/user');
+// const chai = require('chai')
+// const should = chai.should();
+const mongoose = require('mongoose');
+const server = require('../index');
+
+const mockgoose = require('mockgoose');
+// mockgoose(mongoose);
+mockgoose(mongoose).then(() => {
+	mongoose.connect('mongodb://localhost:authTest/authTest', (err) => {
+		done(err);
+	});
+});
+
+// const User = mongoose.model('User');
+// const ObjectId = mongoose.Types.ObjectId();
 
 describe('authentication', () => {
 
   describe('signup', () => {
 
-    beforeEach(() => {
-      server = require('../index');
+    beforeEach((done) => {
+      mockgoose.reset(() => {
+        done();
+      });
     });
 
-    afterEach(() => {
+    afterEach((done) => {
       server.close();
+      mockgoose.reset(() => {
+        done();
+      });
     });
 
-    it('should see if a user with the given email exists', (done) => {
-      request(server).get('/signup').expect(200, done);
+    it('should create and save the record if a user with the given email does not exist', (done) => {
+      const user = { email: 'test@test.com', password: '123' };
+      request(server).post('/signup').send(user).expect({ success: true }, done);
     });
 
-    it('404 everything else', (done) => {
-      console.log('test 404')
-      request(server).get('/foo/bar').expect(404, done);
+    it('should return an error if a user with the given email already exists', (done) => {
+      const user = { email: 'test@test.com', password: '123' };
+      request(server).post('/signup').send(user).expect({ success: true }, () => {
+      	request(server).post('/signup').send(user).expect(422, done);
+      });      
     });
 
-    // it('should return an error if a user with the given email does exist', () => {
-
-    // });
-
-    // it('should create and save the record if a user with the given email does not exist', () => {
-
-    // });
-
-    // it('should respond to the request indicating that the user was created', () => {
+    // it('should return an error if the database connection fails', () => {
 
     // });
   });
