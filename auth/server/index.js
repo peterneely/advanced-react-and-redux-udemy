@@ -1,5 +1,5 @@
 const express = require('express');
-// const http = require('http');
+const http = require('http');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const router = require('./router');
@@ -13,11 +13,9 @@ app.use(bodyParser.json({ type: '*/*' }));
 
 router(app);
 
-// const server = http.createServer(app);
+const server = http.createServer(app);
 const port = process.env.PORT || 3090;
-// server.listen(port);
-const server = app.listen(port);
+server.listen(port);
 console.log('Server listening on port: ', port);
 
-// module.exports = server;
 module.exports = server;
