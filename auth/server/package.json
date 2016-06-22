@@ -17,9 +17,8 @@
     "nodemon": "^1.9.2"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
     "mocha": "^2.5.3",
-    "mockgoose": "^6.0.3",
+    "sinon": "^1.17.4",
     "supertest": "^1.2.0"
   }
 }
