@@ -1,3 +1,3 @@
 exports.signup = (req, res, next) => {
-  res.json({ "data": 123 });
+  res.status(200).send('ok');
 }
