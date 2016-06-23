@@ -5,6 +5,7 @@ const User = require('../models/user');
 describe('authentication', () => {
 
   describe('signup', () => {
+    const noErr = null;
     let server;
     let user;
     let UserStub;
@@ -35,13 +36,13 @@ describe('authentication', () => {
     });
 
     it('should create and save the record if a user with the given email does not exist', (done) => {
-      UserStub.findOne.yields(null, null);
-      UserStub.create.returns({ save: sinon.stub().callsArg[0] });
+      UserStub.findOne.yields(noErr, null);
+      UserStub.create.returns(200);
       request(server).post('/signup').send(user).expect(200, done);
     });
 
     it('should return an error if a user with the given email already exists', (done) => {
-      UserStub.findOne.yields(null, user);
+      UserStub.findOne.yields(noErr, user);
       request(server).post('/signup').send(user).expect(422, done);
     });
 
