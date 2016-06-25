@@ -13,13 +13,16 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "jwt-simple": "^0.5.0",
     "mongoose": "^4.5.1",
     "morgan": "^1.7.0",
     "nodemon": "^1.9.2"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "mocha": "^2.5.3",
     "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0",
     "supertest": "^1.2.0"
   }
 }

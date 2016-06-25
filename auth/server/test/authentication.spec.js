@@ -1,6 +1,12 @@
+const chai = require('chai');
+const encrypter = require('../modules/encrypter');
 const request = require('supertest');
 const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 const User = require('../models/user');
+
+const expect = chai.expect;
+chai.use(sinonChai);
 
 describe('authentication', () => {
 
@@ -39,11 +45,21 @@ describe('authentication', () => {
       var noUser = null;
       UserStub.findOne.yields(noErr, noUser);
       UserStub.create.withArgs(user).yields(noErr);
-      request(server).post('/signup').send(user).expect(201).expect({ success: true }, done);
+      request(server).post('/signup').send(user).expect(201, done);
     });
 
-    it('should encrypt the password when the user is created', (done) => {
-      done();
+    xit('should encrypt the password when the user is created', (done) => {
+      sinon.spy(encrypter, 'encrypt');
+      const password = '123';
+      var user = { email: 'test@test.com', password: password };
+      var noUser = null;
+      UserStub.findOne.yields(noErr, noUser);
+      UserStub.create.withArgs(user).yields(noErr, user);
+      request(server).post('/signup').send(user).end((err, result) => {
+        expect(encrypter.encrypt).to.have.been.called();
+        if (err) return done(err);
+        done();
+      });
     });
 
     it('should return an error if a user with the given email already exists', (done) => {

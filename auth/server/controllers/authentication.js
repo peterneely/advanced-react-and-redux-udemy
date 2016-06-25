@@ -1,3 +1,5 @@
+const config = require('../config');
+const jwt = require('jwt-simple');
 const User = require('../models/user');
 
 exports.signup = (req, res, next) => {
@@ -9,9 +11,14 @@ exports.signup = (req, res, next) => {
   User.findOne({ email: email }, (err, foundUser) => {
     if (err) return next(err);
     if (foundUser) return res.status(422).send({ error: 'Email is already being used.' });
-    User.create({ email: email, password: password }, (err) => {
+    User.create({ email: email, password: password }, (err, user) => {
       if (err) return next(err);
-      res.status(201).json({ success: true });
+      res.status(201).json({ token: tokenForUser(user) });
     });
   });
+}
+
+function tokenForUser(user) {
+  const timestamp = new Date().getTime();
+  return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
 }
