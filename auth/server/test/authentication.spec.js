@@ -44,7 +44,7 @@ describe('authentication', () => {
       var user = { email: 'test@test.com', password: '123' };
       var noUser = null;
       UserStub.findOne.yields(noErr, noUser);
-      UserStub.create.withArgs(user).yields(noErr);
+      UserStub.create.withArgs(user).yields(noErr, user);
       request(server).post('/signup').send(user).expect(201, done);
     });
 
