@@ -50,8 +50,7 @@ describe('authentication', () => {
 
     xit('should encrypt the password when the user is created', (done) => {
       sinon.spy(encrypter, 'encrypt');
-      const password = '123';
-      var user = { email: 'test@test.com', password: password };
+      var user = { email: 'test@test.com', password: '123' };
       var noUser = null;
       UserStub.findOne.yields(noErr, noUser);
       UserStub.create.withArgs(user).yields(noErr, user);
