@@ -4,12 +4,12 @@ module.exports = {
 	encrypt: encrypt
 };
 
-function encrypt(value, respond) {
+function encrypt(value, done) {
   bcrypt.genSalt(10, (err, salt) => {
-    if (err) return respond(err);
+    if (err) return done(err);
     bcrypt.hash(value, salt, null, (err, hash) => {
-      if (err) return respond(err);
-      respond(null, hash);
+      if (err) return done(err);
+      done(null, hash);
     });
   });
 }
