@@ -1,5 +1,5 @@
 const chai = require('chai');
-const encrypter = require('../modules/encrypter');
+const encrypter = require('../services/encrypter');
 const request = require('supertest');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');

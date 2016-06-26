@@ -1,4 +1,4 @@
-const encrypter = require('../modules/encrypter');
+const encrypter = require('../services/encrypter');
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -7,22 +7,15 @@ const userSchema = new Schema({
   password: String
 });
 
-userSchema.pre('save', encryptPassword);
-
 userSchema.methods.comparePassword = comparePassword;
 
-// function comparePassword(candidatePassword, callback) {
-//   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-//     if (err) return callback(err);
-//     callback(null, isMatch);
-//   });
-// }
+userSchema.pre('save', encryptPassword);
 
 module.exports = mongoose.model('user', userSchema);
 
 function comparePassword(candidatePassword, done) {
-  const password = this.password;
-  encrypter.compare(candidatePassword, password, done);
+  const user = this;
+  encrypter.compare(candidatePassword, user.password, done);
 }
 
 function encryptPassword(next) {
