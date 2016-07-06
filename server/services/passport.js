@@ -10,7 +10,7 @@ passport.use(createLocalStrategy());
 
 function createJwtStrategy() {
   const options = {
-    jwtFromRequest: ExtractJwt.fromHeader('Authorization'),
+    jwtFromRequest: ExtractJwt.fromHeader('authorization'),
     secretOrKey: config.secret
   };
   return new JwtStrategy(options, (payload, done) => {
