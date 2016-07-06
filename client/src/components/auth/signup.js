@@ -7,27 +7,42 @@ class Signup extends Component {
   render() {
     const { handleSubmit, fields: { email, password, passwordConfirm } } = this.props;
     return (
-      <form>
-      	{this._renderField({...email, label: 'Email'})}
-      	{this._renderField({...password, label: 'Password'})}
-      	{this._renderField({...passwordConfirm, label: 'Confirm Password'})}
-      	<button className="btn btn-primary">Sign up!</button>
+      <form onSubmit={handleSubmit(this._handleSubmit.bind(this))}>
+        {this._renderField({...email, label: 'Email'})}
+        {this._renderField({...password, label: 'Password'})}
+        {this._renderField({...passwordConfirm, label: 'Confirm Password'})}
+        {this._renderAlert()}
+        <button className="btn btn-primary">Sign up!</button>
       </form>
     );
+  }
+
+  _handleSubmit(formProps) {
+    this.props.signupUser(formProps);
+  }
+
+  _renderAlert() {
+    if (this.props.errorMessage) {
+      return (
+        <div className="alert alert-danger">
+          <strong>Oops!</strong> {this.props.errorMessage}
+        </div>
+      );
+    }
   }
 
   _renderField(field) {
     return (
       <fieldset className="form-group">
-    		<label>{`${field.label}:`}</label>
-    		<input className="form-control" {...field} />
-    		{field.touched && field.error && <div className="error">{field.error}</div>}
-    	</fieldset>
+        <label>{`${field.label}:`}</label>
+        <input className="form-control" {...field} />
+        {field.touched && field.error && <div className="error">{field.error}</div>}
+      </fieldset>
     );
   }
 }
 
-export default reduxForm(createOptions(), null, actions)(Signup);
+export default reduxForm(createOptions(), mapStateToProps, actions)(Signup);
 
 function createOptions() {
   return {
@@ -44,4 +59,8 @@ function createOptions() {
     if (formProps.password != formProps.passwordConfirm) errors.password = 'Passwords must match';
     return errors;
   }
+}
+
+function mapStateToProps(state) {
+  return { errorMessage: state.auth.error };
 }
